@@ -36,7 +36,7 @@ const index = () => {
 
   const fetchTodos = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/GetAllTodos");
+      const response = await axios.get("http://localhost:8080/api/v1/GetAllTodos");
       setTodos(response.data);
       setTodosCopy(response.data);
     } catch (error) {
@@ -46,7 +46,7 @@ const index = () => {
 
   const addTodo = async () => {
     try {
-      const response = await axios.post(`http://localhost:8080/CreateTodo`, { title: todoInput, completed: false });
+      const response = await axios.post(`http://localhost:8080/api/v1/CreateTodo`, { title: todoInput, completed: false });
       console.log(response.data);
       setTodos(response.data);
       setTodosCopy(response.data);
@@ -65,7 +65,7 @@ const index = () => {
         return;
       }
       const dataUpdate = { ...todos[todoIndex], title: todoInput };
-      const response = await axios.put(`http://localhost:8080/UpdateTodo/${dataUpdate.id}`, dataUpdate);
+      const response = await axios.put(`http://localhost:8080/api/v1/UpdateTodo/${dataUpdate.id}`, dataUpdate);
       console.log(response.data);
       const UpdateTodos = [...todos];
       UpdateTodos[todoIndex] = response.data;
@@ -89,7 +89,7 @@ const index = () => {
 
   const deleteTodo = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:8080/DeleteTodo/${id}`);
+      const response = await axios.delete(`http://localhost:8080/api/v1/DeleteTodo/${id}`);
       console.log(response.data);
       setTodos(todos.filter(todo => todo.id !== id));
       setTodosCopy(todos.filter(todo => todo.id !== id));
@@ -104,7 +104,7 @@ const index = () => {
         ...todos[index], 
         completed: !todos[index].completed
       }
-      const response = await axios.put(`http://localhost:8080/UpdateTodo/${id}`, todoToUpdate);
+      const response = await axios.put(`http://localhost:8080/api/v1/UpdateTodo/${id}`, todoToUpdate);
       console.log(response.data);
       const UpdateTodos = [...todos];
       UpdateTodos[index] = response.data;
