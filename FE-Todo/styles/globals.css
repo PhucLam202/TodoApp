@@ -1,0 +1,305 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* //ELEMENT */
+body {
+  background-color: rgb(48, 48, 48) !important;
+}
+
+.main {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.todo-app {
+  width: 90%;
+  max-width: 800px;
+  background-color: #242424;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.input-section {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.input-section input {
+  padding: 15px 20px;
+  border: 2px solid #333;
+  background-color: #1a1a1a;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.input-section input:focus {
+  border-color: #4a4a4a;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+.input-section button {
+  padding: 15px 25px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.input-section button:hover {
+  background-color: #444;
+  transform: translateY(-2px);
+}
+
+.input-section button:active {
+  transform: translateY(0);
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.todo-item:hover {
+  transform: translateX(5px);
+  background-color: #2a2a2a;
+}
+
+.todo-text {
+  flex: 1;
+  color: #fff;
+  margin: 0 15px;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.todo-actions button {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-btn {
+  background-color: #2c5282 !important;
+}
+
+.edit-btn:hover {
+  background-color: #2b6cb0 !important;
+}
+
+.delete-btn {
+  background-color: #9b2c2c !important;
+}
+
+.delete-btn:hover {
+  background-color: #c53030 !important;
+}
+
+.todo-actions button svg {
+  transition: transform 0.2s ease;
+}
+
+.todo-actions button:hover svg {
+  transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .input-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .todo-app {
+    width: 95%;
+    padding: 20px;
+  }
+  
+  .todo-item {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .todo-actions {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.todo-item {
+  animation: fadeIn 0.3s ease;
+}
+
+.todo-date {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  font-size: 12px;
+  color: #666;
+}
