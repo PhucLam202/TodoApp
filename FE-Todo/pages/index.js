@@ -18,6 +18,10 @@ const index = () => {
   const [count, setCount] = useState(0);
   const [search, setSearch] = useState("");
   const [searchItem, setSearchItem] = useState(search);
+  const [labelInput, setLabelInput] = useState("");
+  const [statusInput, setStatusInput] = useState("");
+  const [priorityInput, setPriorityInput] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
 
 
@@ -46,16 +50,35 @@ const index = () => {
 
   const addTodo = async () => {
     try {
-      const response = await axios.post(`http://localhost:8080/api/v1/CreateTodo`, { title: todoInput, completed: false });
-      console.log(response.data);
-      setTodos(response.data);
-      setTodosCopy(response.data);
+      const todoData = {
+        title: todoInput,
+        completed: false,
+      };
+
+      // Chỉ thêm các trường nếu chúng có giá trị
+      if (labelInput) {
+        todoData.label = labelInput;
+      }
+      if (statusInput) {
+        todoData.status = statusInput;
+      }
+      if (priorityInput) {
+        todoData.priority = priorityInput;
+      }
+
+      const response = await axios.post(`http://localhost:8080/api/v1/CreateTodo`, todoData);
+      console.log("add", response.data);
+      setTodos([...todos, response.data]);
+      setTodosCopy([...todosCopy, response.data]);
       setTodoInput("");
+      setLabelInput("");
+      setStatusInput("");
+      setPriorityInput("");
       fetchTodos();
     } catch (error) {
       console.error("Error adding todo:", error);
     }
-  }
+  };
 
   const updateTodo = async () => {
     try {
@@ -64,7 +87,13 @@ const index = () => {
         console.error("Todo not found:", todoIndex);
         return;
       }
-      const dataUpdate = { ...todos[todoIndex], title: todoInput };
+      const dataUpdate = {
+        ...todos[todoIndex],
+        title: todoInput,
+        label: labelInput,
+        status: statusInput,
+        priority: priorityInput,
+      };
       const response = await axios.put(`http://localhost:8080/api/v1/UpdateTodo/${dataUpdate.id}`, dataUpdate);
       console.log(response.data);
       const UpdateTodos = [...todos];
@@ -146,18 +175,37 @@ const index = () => {
   const RenderTodos = (todos) => {
     return todos.map((todo, index) => (
       <li key={todo.id} className="todo-item">
-        <span className="todo-text">{todo.title}</span>
-        <div className="todo-actions">
-          <button onClick={() => editTodo(index)} className="edit-btn">
-            <MdEdit size={20} />
-          </button>
-          <button onClick={() => deleteTodo(todo.id)} className="delete-btn">
-            <MdDelete size={20} />
-          </button>
+        <div className="todo-main-content">
+          <span className="todo-text">{todo.title}</span>
+          {(todo.status || todo.priority || todo.label) && (
+            <div className="todo-details">
+              {todo.status && (
+                <span className="todo-tag status">{todo.status}</span>
+              )}
+              {todo.priority && (
+                <span className="todo-tag priority">{todo.priority}</span>
+              )}
+              {todo.label && (
+                <span className="todo-tag label">{todo.label}</span>
+              )}
+            </div>
+          )}
         </div>
-        <small className="todo-date">
-          {new Date(todo.created_at).toLocaleDateString()}
-        </small>
+        <div className="todo-right">
+          <div className="todo-actions">
+            <button onClick={() => editTodo(index)} className="edit-btn">
+              <MdEdit size={18} />
+            </button>
+            <button onClick={() => deleteTodo(todo.id)} className="delete-btn">
+              <MdDelete size={18} />
+            </button>
+          </div>
+          {todo.created_at && (
+            <small className="todo-date">
+              {new Date(todo.created_at).toLocaleDateString()}
+            </small>
+          )}
+        </div>
       </li>
     ));
   };
@@ -166,17 +214,52 @@ const index = () => {
     <div className="main">
       <div className="todo-app">
         <div className="input-section">
-          <input type="text" id="todoInput" placeholder="Add a todo" value={todoInput} onChange={(e) => setTodoInput(e.target.value)} />
-          <button onClick={() => handleTodo()} className="add">{editIndex !== -1 ? "Update" : "Add"}</button>
-          <input 
-            type="text" 
-            id="search-input" 
-            placeholder="Search a todo" 
-            value={searchInput} 
-            onChange={(e) => setSearchInput(e.target.value)} 
+          <div className="input-container">
+            <input
+              type="text"
+              id="todoInput"
+              placeholder="Add a todo"
+              value={todoInput}
+              onChange={(e) => setTodoInput(e.target.value)}
+            />
+            <span className="dropdown-icon" onClick={() => setDropdownOpen(!dropdownOpen)}>
+              ▼
+            </span>
+          </div>
+          <button onClick={() => handleTodo()} className="add">
+            {editIndex !== -1 ? "Update" : "Add"}
+          </button>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search a todo"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
           <button onClick={() => setSearchInput("")}>Clear</button>
         </div>
+        {dropdownOpen && (
+          <div className="dropdowns">
+            <select value={labelInput} onChange={(e) => setLabelInput(e.target.value)}>
+              <option value="Work">Work</option>
+              <option value="Personal">Personal</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Others">Others</option>
+            </select>
+            <select value={statusInput} onChange={(e) => setStatusInput(e.target.value)}>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+            <select value={priorityInput} onChange={(e) => setPriorityInput(e.target.value)}>
+              <option value="">Select Priority</option>
+              <option value="VeryLow">Very Low</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="VeryHigh">Very High</option>
+            </select>
+          </div>
+        )}
         {/*Body List */}
         <ul className="todo-list">
           {RenderTodos(todos)}

@@ -36,9 +36,6 @@ pub async fn update_todo(
     update_data: web::Data<AppState>,
     update_todo: web::Json<UpdateTodo>,
 ) -> impl Responder {
-    if update_todo.title.is_none() && update_todo.completed.is_none() && update_todo.status.is_none() && update_todo.priority.is_none() && update_todo.label.is_none() {
-        return Error::new("Không có dữ liệu để cập nhật", ErrorCode::InvalidInput).error_response();
-    }
     let mut todos = update_data.todo_list.lock().unwrap();
     if let Some(todo) = todos.iter_mut().find(|todo| todo.id == *path) {
         if let Some(title) = &update_todo.title {
